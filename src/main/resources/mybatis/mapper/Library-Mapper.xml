@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yong.library.mapper.LibraryMapper">
+	
+	<select id="listBook" resultType="BookVO">
+		select * from Book
+	</select>
+	
+	<insert id="insertBook" parameterType="BookVO">
+		insert into Book(book_id, book_name, book_writer, book_date, book_state)
+		values(BOOK_SEQ.nextval, #{bookName}, #{bookWriter}, sysdate, #{bookState})
+	</insert>
+	
+	<update id="updateBook" parameterType="BookVO">
+		update Book
+		set
+			book_name = #{bookName}, 
+			book_writer = #{bookWriter}, 
+			book_date = sysdate 
+		where book_no = #{bookNo}
+	</update>
+	
+	<select id="getHistory" resultType="RentalVO">
+		select * from Rental
+	</select>
+	
+	<insert id="rentBook" parameterType="RentalVO">
+		insert into Rental(rent_no, rent_sdate, book_no, mem_id)
+		values(BOOK_SEQ.nextval, sysdate, #{bookNo}, #{memId})
+	</insert>
+	
+	<update id="returnBook" parameterType="String">
+		update Rental
+		set
+			rent_edate = sysdate
+		where book_no = #{bookNo} and rent_edate is null
+	</update>
+	
+	<update id="stateYBook" parameterType="String">
+		update Book
+		set
+			book_state = "Y" 
+		where book_no = #{bookNo}
+	</update>
+	
+</mapper>
